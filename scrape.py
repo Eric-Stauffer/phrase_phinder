@@ -1,4 +1,4 @@
-from bs4 import  BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
 import os
 import fileinput
@@ -10,7 +10,7 @@ def createEpisodeList(seriesPath):
     aList = []
     source = requests.get(seriesPath).text
     # open soup and find correct section of episodes
-    soup = BeautifulSoup(source,'lxml')
+    soup = BeautifulSoup(source,'html.parser')
     episodesSection = soup.table
 
     episodes = episodesSection.find_all("tr")
@@ -70,7 +70,7 @@ def scanEpisode(episodePath):
     except:
         return ""
     returnString = ""
-    soup = BeautifulSoup(source,'lxml')
+    soup = BeautifulSoup(source,'html.parser')
     postBody = soup.find("div",class_="postbody")
     pTags = postBody.find_all('p')
     for line in pTags:
@@ -104,7 +104,8 @@ def stripFile(episodeString):
 
 
 startTime = time.time()
-createEpisodeList("https://transcripts.foreverdreaming.org/viewforum.php?f=574")
+createEpisodeList("https://transcripts.foreverdreaming.org/viewforum.php?f=194&sid=0a5a963468b3692bfecee741602f507b")
 endTime = time.time()
 print("this took " + str(endTime-startTime)+"seconds")
+
 
