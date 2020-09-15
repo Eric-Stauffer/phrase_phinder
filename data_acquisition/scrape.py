@@ -49,10 +49,11 @@ def nextPageLink(soup):
             return href[1:]
 
 
-def makeFolderAndFile(episodeLinks,showName):
-    os.mkdir(os.path.join(os.getcwd(),showName))
+def makeFolderAndFile(episodeLinks, showName):
+    parent_dir = os.path.dirname(os.getcwd())
+    os.mkdir(os.path.join(parent_dir,showName))
     for nameAndHref in episodeLinks:
-        episodePath = os.path.join(os.getcwd(),showName,str(nameAndHref[0]))
+        episodePath = os.path.join(parent_dir,showName,str(nameAndHref[0]))
 
         file = open(episodePath,"w")
         file.write(scanEpisode(nameAndHref[1]))
@@ -104,8 +105,7 @@ def stripFile(episodeString):
 
 
 startTime = time.time()
-createEpisodeList("https://transcripts.foreverdreaming.org/viewforum.php?f=194&sid=0a5a963468b3692bfecee741602f507b")
+createEpisodeList("https://transcripts.foreverdreaming.org/viewforum.php?f=574&sid=6bd60f28681832de654bfbab1c4a714d")
 endTime = time.time()
 print("this took " + str(endTime-startTime)+"seconds")
-
 

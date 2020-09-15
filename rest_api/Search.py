@@ -19,9 +19,9 @@ def searchFunction(episodeString,searchString,season,episode):
                 percentInEpisode = (count/amountOfLinesInFile(episodeString))
                 minutesIntoEpisode = (secondsInEpisode*percentInEpisode)//60
                 secondsIntoEpisode = round((secondsInEpisode*percentInEpisode)%60)
+                return {"season": season,"episode":episode,"minute":minutesIntoEpisode,"second":secondsIntoEpisode}
+                # return ("Your search is around",minutesIntoEpisode,"minutes and", secondsIntoEpisode, "seconds into episode", str(episode),"season",season)
 
-                print("Your search is around",minutesIntoEpisode,"minutes and", secondsIntoEpisode, "seconds into episode", str(episode),"season",season)
-                return True
 def findNumberOfEpisodes(seasonNumber):
     import os
     seasonPath = "/Users/user/Desktop/office_transcripts/season_0" + str(seasonNumber)
@@ -37,10 +37,9 @@ def stripSearchString(searchString):
 
 
 
-def main():
-    searchString = input("Enter what you want to search for: ").lower()
-    searchString = stripSearchString(searchString)
-
+def main(searchString):
+    episode_list = []
+    searchString = stripSearchString(searchString).lower()
     for episode in os.listdir(os.path.join(os.getcwd(),"The Office")):
         episodeNumber = ""
         seasonNumber = ""
@@ -49,16 +48,14 @@ def main():
                 seasonNumber += episode[i]
             elif i > 2:
                 episodeNumber += episode[i]
-
-        searchFunction(os.path.join(os.getcwd(),"The Office",(seasonNumber + "x" + episodeNumber)),searchString,seasonNumber,episodeNumber)
-
-
-
-    # for season in range(1,len(os.listdir(os.path.join(os.getcwd(),"seasons"))) + 1):
-    #     for episode in range(1,len(os.listdir(os.path.join(os.getcwd(),"seasons","season_"+str(season)))) + 1):
-    #         searchFunction(os.path.join(os.getcwd(),"seasons","season_"+ str(season),"episode_"+str(episode)+".txt"),searchString,season,episode)
+        search_response = searchFunction(os.path.join(os.getcwd(),"The Office",(seasonNumber + "x" + episodeNumber)),searchString,seasonNumber,episodeNumber)
+        if(search_response):
+            episode_list.append(search_response)
+    return {"episode_number":len(episode_list),"episodes":episode_list}
 
 
 
 
-main()
+
+
+
