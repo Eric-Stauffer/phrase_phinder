@@ -19,6 +19,7 @@ def searchFunction(episodeString,searchString,season,episode):
                 percentInEpisode = (count/amountOfLinesInFile(episodeString))
                 minutesIntoEpisode = (secondsInEpisode*percentInEpisode)//60
                 secondsIntoEpisode = round((secondsInEpisode*percentInEpisode)%60)
+
                 return {"season": season,"episode":episode,"minute":minutesIntoEpisode,"second":secondsIntoEpisode}
                 # return ("Your search is around",minutesIntoEpisode,"minutes and", secondsIntoEpisode, "seconds into episode", str(episode),"season",season)
 
