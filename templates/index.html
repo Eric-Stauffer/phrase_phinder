@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            flex-direction: column;
+            color: white;
+            background-color: #426AA6;
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            font-size: 100px;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            padding: 0px 30px;
+        }
+        
+        h1 {
+            padding-left: 30px;
+            font-size: 100px;
+            margin: 0px;
+        }
+        
+        h2 {
+            font-size: 40px;
+            text-decoration: underline;
+        }
+        
+        h4 {
+            padding-right: 25vw;
+            margin: 0 auto;
+            font-size: 50px;
+            margin-top: -20px;
+        }
+        
+        #root {
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .item-header {
+            text-decoration: underline;
+            padding: 10px;
+        }
+        
+        input {
+            min-width: 30vw;
+            border-radius: 24px;
+            font-size: larger;
+            outline: none;
+        }
+        
+        #search-form {
+            padding-top: 3vh;
+            display: flex;
+            justify-content: center;
+        }
+        
+        #submit-button {
+            font-size: xx-large;
+            color: white;
+            background-color: #426AA6;
+            margin: 0vw 0 0 1vw;
+        }
+        
+        .returned-episodes {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .episode-img {
+            padding: .5vw 0 .5vw 0;
+            max-width: 20vw;
+            max-height: 12.5vw;
+            height: auto;
+        }
+        
+        .episode-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        .episode-string {
+            font-weight: 600;
+            font-size: xx-large;
+        }
+        
+        .episode-time {
+            font-weight: 600;
+            font-size: x-large;
+        }
+        
+        #open-par {
+            font-size: xx-large;
+            font-weight: 500;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <h1>Phrase Phinder</h1>
+        <h4>The Office Edition</h4>
+    </header>
+
+    <div id="root">
+        <p id="open-par">Search for your favorite quotes from The Office and we<br> will let you know what episodes they are in.</p>
+        <div id="search-form">
+            <input v-model="phrase" type="text" placeholder="Enter Phrase..." id="search-bar">
+            <button @click="fetchEpisodes()" type="button" id="submit-button">Enter</button>
+        </div>
+        <div id="Episodes">
+            <h2 v-if="searched">We found {{numOfEpisodes}} Episode<span v-if="numOfEpisodes > 1">s</span> with that phrase</h2>
+
+            <div class="returned-episodes" v-for="episode in episodes">
+                <img class="episode-img" :src="imgLocation(episode)" alt="images/the office.png ">
+                <div class="episode-info ">
+                    <p class="episode-string ">Season {{episode.season}} Episode {{episode.episode}}</p>
+                    <p class="episode-time ">Estimated Time: <span v-if="episode.minute < 10 ">0</span>{{episode.minute}}:<span v-if="episode.second < 10 ">0</span>{{episode.second}}</p>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js "></script>
+
+    <script>
+        let app = new Vue({
+                el: "#root ",
+                data: {
+                    episodes: [],
+                    phrase: " ",
+                    numOfEpisodes: 0,
+                    searched: false,
+                },
+
+                computed: {
+
+
+                },
+                methods: {
+                    async fetchEpisodes() {
+                        let data = {
+                            phrase: this.phrase
+                        }
+                        let request = await fetch("http://ericstauffer12.eu.pythonanywhere.com/search", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data),
+                        })
+                        let response = await request.json();
+                        this.numOfEpisodes = response.episode_number;
+
+                        this.episodes = response.episodes;
+                        this.searched = true;
+
+                    },
+                    imgLocation(episode) {
+
+                        return 'images/S'.concat(episode.season).concat("/E").concat(episode.episode).concat(".jpg")
+
+                    }
+                }
+            }
+
+        )
+    </script>
+
+</body>
+
+</html>
