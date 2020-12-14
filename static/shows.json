@@ -1,0 +1,37 @@
+{
+    "type": "module",
+    "shows": [
+        {
+            "name" : "The Office",
+            "commonPhrases" : [
+                "Sometimes I'll start a sentence",
+                "I'm not superstitious",
+                "tune myself out"
+
+            ]
+        }
+    ],
+    "movies": [
+        {
+            "name" : "How the Grinch Stole Christmas",
+            "commonPhrases" : [
+                "Grinch"
+            ]
+        },
+        {
+            "name" : "Snowden",
+            "commonPhrases" : [
+                "Snowden"
+            ]
+        }
+    ],
+    "comedians": [
+        {
+            "name" : "Dave Chappelle",
+            "commonPhrases" : [
+                "Dave Chappelle"
+            ]
+        }
+    ]
+
+}

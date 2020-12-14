@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    background-color: #f7f7f7;
+}
+.tab{
+    padding-left: 1vw;
+}
+#nav-bar {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    background-color: #426AA6;
+    width: 100%;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding: 0px 30px;
+
+}
+.logo{
+    font-size: 60px;
+    margin: 0;
+    padding-left: 30px;
+}
+#nav-dropdowns{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-around;
+    margin-left: auto;
+}
+.dropdown-menu{
+    font-size: large;
+}
+.btn{
+    background-color: #426AA6;
+    font-size: xx-large;
+}
+
+#root {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.item-header {
+    text-decoration: underline;
+    padding: 10px;
+}
+
+input {
+    min-width: 40vw;
+    border-radius: 24px;
+    font-size: x-large;
+    outline: none;
+    font-weight: 500;
+    padding: 6px 0px;
+}
+
+#search-form {
+    padding-top: 3vh;
+    display: flex;
+    justify-content: center;
+}
+
+#submit-button {
+    font-size: xx-large;
+    color: white;
+    background-color: #426AA6;
+    margin: 0vw 0 0 1vw;
+}
+
+.returned-episodes {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    display: flex;
+    width: 40vw;
+    margin: auto;
+}
+
+.episode-img {
+    width: 20vw;
+    max-width: 20vw;
+    max-height: 12.5vw;
+    height: auto;
+    padding: 1vw;
+    align-self: center;
+}
+
+.episode-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 20vw;
+    padding: 1vw;
+    align-self: flex-start;
+}
+.episode-string {
+    font-size: 2em;
+}
+.episode-name{
+    font-size: 3em;
+    font-weight: bold;
+}
+.episode-time {
+    font-size: 2em;
+}
+
+#open-par {
+    font-size: xx-large;
+    margin: 2vw;
+    width: 40vw;
+}
+p{
+    margin: 4px;
+}
+#episode-num{
+    padding-top: 60px;
+    font-weight: 600;
+    font-size: 48px;
+    max-width: 40vw;
+}
+
+#search-buttons{
+    display: flex;
+    padding-top: 50px;
+    width: 25vw;
+    justify-content: space-evenly;
+}

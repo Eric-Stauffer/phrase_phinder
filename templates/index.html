@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+<div id="root">
+<body>
+    <div id="nav-bar">
+    <p class="logo">Phrase Phinder</p>
+        <div id="nav-dropdowns">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Movies
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div v-for="movie in movies">
+                        <a class="dropdown-item" @click="[reset(),searchTitle = movie]">{{movie.name}}</a>
+                    </div>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   TV Shows
+                </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div v-for="show in shows">
+                            <a class="dropdown-item" @click="[reset(),searchTitle = show]">{{show.name}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Comedians
+                    </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div v-for="comedian in comedians">
+                                <a class="dropdown-item" @click="[reset(),searchTitle = comedian]">{{comedian.name}}</a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <p id="open-par">Searching for phrases from <span style="font-weight: 900;">{{searchTitle.name}}.</span>
+            Select a different title with the drop down menus on your right.
+        </p>
+            <input v-model="phrase" type="text" placeholder="Enter Phrase..." id="search-bar">
+            <div id="search-buttons">
+                <button class="btn-secondary" @click="fetchEpisodes()" type="button" id="submit-button">Search</button>
+                <button class="btn-secondary" @click="searchRandom()" type="button" id="submit-button">Random</button>
+             </div>
+        <div id="Episodes" v-if="searched">
+            <h1 id="episode-num">We found that phrase {{numOfEpisodes}} time<span v-if="numOfEpisodes != 1">s</span></h1>
+
+            <div class="returned-episodes" v-for="episode in episodes">
+                <img class="episode-img" :src="imgURL" alt="images/the office.png ">
+                <div class="episode-info ">
+                    <p class="episode-name ">{{episode.name}}</p>
+                    <p v-if="episode.season > 0" class="episode-string ">Season {{episode.season}}</p>
+                    <p v-if="episode.episode > 0" class="episode-string ">Episode {{episode.episode}}</p>
+                    <p class="episode-time ">Time: {{toTime(episode.startTime)}} - {{toTime(episode.endTime)}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js "></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/home.css" type="text/css">
+
+    <script>
+        let app = new Vue({
+                el: "#root ",
+
+                data: {
+                    episodes: [],
+                    phrase: "",
+                    numOfEpisodes: 0,
+                    searched: false,
+                    shows: [],
+                    movies: [],
+                    searchTitle: {},
+                    comedians: [],
+                    showList: {
+                        // for local only
+                                "type": "module",
+                                "shows": [
+                                    {
+                                        "name" : "The Office",
+                                        "commonPhrases" : [
+                                            "Sometimes I'll start a sentence",
+                                            "I'm not superstitious",
+                                            "tune myself out"
+
+                                        ]
+                                    }
+                                ],
+                                "movies": [
+                                    {
+                                        "name" : "How the Grinch Stole Christmas",
+                                        "commonPhrases" : [
+                                            "Grinch"
+                                        ]
+                                    },
+                                    {
+                                        "name" : "Snowden",
+                                        "commonPhrases" : [
+                                            "Snowden"
+                                        ]
+                                    }
+                                ],
+                                "comedians": [
+                                    {
+                                        "name" : "Dave Chappelle",
+                                        "commonPhrases" : [
+                                            "Dave Chappelle"
+                                        ]
+                                    }
+                                ]
+
+                                }
+                },
+                created(){
+                    // for server only
+                    // let request = new XMLHttpRequest();
+
+                    // request.open("GET", "../static/shows.json", false)
+
+                    // request.send();
+                    // this.showList = JSON.parse(request.response);
+
+                    for (i = 0 ;i < this.showList.shows.length; i++){
+                        this.shows.push(this.showList.shows[i])
+                    }
+                    for (i = 0 ;i < this.showList.comedians.length; i++){
+                        this.comedians.push(this.showList.comedians[i])
+                    }
+                    for (i = 0 ;i < this.showList.movies.length; i++){
+                        this.movies.push(this.showList.movies[i])
+                    }
+                    this.searchTitle = this.shows[0]
+                },
+
+                computed: {
+                    imgURL: function() {
+                        return "../static/show_images/"+this.searchTitle.name +".jpeg"
+                    }
+
+
+                },
+                methods: {
+                    async fetchEpisodes() {
+                        let data = {
+                            phrase: this.phrase,
+                            show: this.searchTitle.name
+                        }
+                        let request = await fetch("http://ericstauffer12.eu.pythonanywhere.com/search", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data),
+                        })
+                        let response = await request.json();
+                        this.numOfEpisodes = response.episode_number;
+                        this.episodes = response.episodes;
+                        this.searched = true;
+
+                    },
+                    toTime: function(seconds){
+                        if(seconds < 10){
+                            return ("00:0"+seconds.toString())
+                        }
+                        else if(seconds < 60){
+                            return ("00:"+seconds.toString())
+                        }
+                        else if(seconds < 600){
+                            minutes = Math.floor(seconds/60)
+                            remainder = seconds % 60
+                            if (remainder < 10){
+                                return (minutes+":0"+remainder)
+                            }
+                            return ("0"+minutes+":"+remainder)
+                        }
+                        else{
+                            minutes = Math.floor(seconds/60)
+                            remainder = seconds % 60
+                            if (remainder < 10){
+                                return (minutes+":0"+remainder)
+                            }
+                            return (minutes+":"+remainder)
+                        }
+                    },
+                    reset: function () {
+                        this.searched = false;
+                        this.episode_number = 0;
+                        this.episodes = [];
+                        this.phrase = "";
+
+                    },
+                    searchRandom: function () {
+                        let numberOfPhrases = this.searchTitle.commonPhrases.length;
+                        let randInt = Math.floor(Math.random() * numberOfPhrases);
+                        this.phrase = this.searchTitle.commonPhrases[randInt];
+                        this.fetchEpisodes();
+                    }
+
+                }
+            }
+
+        )
+    </script>
+
+</body>
+
+</html>
