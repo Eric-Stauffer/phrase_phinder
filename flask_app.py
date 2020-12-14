@@ -13,10 +13,10 @@ class CustomFlask(Flask):
 
 app = CustomFlask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = 'dons20!'
+app.config['SECRET_KEY'] = 'secret_key'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://EricStauffer12:" \
-                                        "testerman" \
+                                        "password" \
                                         "@EricStauffer12.mysql.eu.pythonanywhere-services.com/" \
                                         "EricStauffer12$TheOffice"
 
